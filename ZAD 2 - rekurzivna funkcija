@@ -1,0 +1,22 @@
+int solveMazeUntil(Maze* maze, int x, int y, Maze* sol, int endX, int endY) {
+    if (x == endX && y == endY && maze->m[y][x] == 1) {
+        sol->m[y][x] = 1;
+        return 1;
+    }
+
+    if (isSafe(maze, x, y) && maze->m[y][x] == 1) {
+        if (sol->m[y][x] == 1)
+            return 0;
+
+        sol->m[y][x] = 1;
+
+        if (solveMazeUntil(maze, x, y + 1, sol, endX, endY)) return 1;
+        if (solveMazeUntil(maze, x - 1, y, sol, endX, endY)) return 1;
+        if (solveMazeUntil(maze, x, y - 1, sol, endX, endY)) return 1;
+        if (solveMazeUntil(maze, x + 1, y, sol, endX, endY)) return 1;
+
+        sol->m[y][x] = 0; // backtrack
+    }
+
+    return 0;
+}
