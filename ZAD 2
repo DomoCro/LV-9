@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 20
+
+typedef struct _MAZE {
+    int m[MAX][MAX];
+    int nx;
+    int ny;
+} Maze;
+
+int isSafe(Maze* maze, int x, int y) {
+    return x >= 0 && x < maze->nx && y >= 0 && y < maze->ny;
+}
+
+void printMaze(Maze* maze) {
+    for (int y = 0; y < maze->ny; y++) {
+        for (int x = 0; x < maze->nx; x++) {
+            printf("%d ", maze->m[y][x]);
+        }
+        printf("\n");
+    }
+}
+
+void printSolution(Maze* sol) {
+    printf("\nRjesenje:\n");
+    for (int y = 0; y < sol->ny; y++) {
+        for (int x = 0; x < sol->nx; x++) {
+            printf("%d ", sol->m[y][x]);
+        }
+        printf("\n");
+    }
+}
+
+int solveMazeUntil(Maze* maze, int x, int y, Maze* sol, int endX, int endY) {
+    if (x == endX && y == endY && maze->m[y][x] == 1) {
+        sol->m[y][x] = 1;
+        return 1;
+    }
+
+    if (isSafe(maze, x, y) && maze->m[y][x] == 1) {
+        if (sol->m[y][x] == 1) return 0;
+        sol->m[y][x] = 1;
+
+        if (solveMazeUntil(maze, x, y + 1, sol, endX, endY)) return 1;
+        if (solveMazeUntil(maze, x - 1, y, sol, endX, endY)) return 1;
+        if (solveMazeUntil(maze, x, y - 1, sol, endX, endY)) return 1;
+        if (solveMazeUntil(maze, x + 1, y, sol, endX, endY)) return 1;
+
+        sol->m[y][x] = 0;
+        return 0;
+    }
+
+    return 0;
+}
+
+int solveMaze(Maze* maze, Maze* sol, int startX, int startY, int endX, int endY) {
+    if (solveMazeUntil(maze, startX, startY, sol, endX, endY) == 0) {
+        printf("Maze cannot be solved\n");
+        return 0;
+    }
+
+    printSolution(sol);
+    return 1;
+}
+
+int main(void) {
+    Maze maze, sol;
+    int startX, startY, endX, endY;
+
+    printf("Unesite dimenzije labirinta (nx ny): ");
+    scanf("%d %d", &maze.nx, &maze.ny);
+
+    printf("Unesite labirint redak po redak (0=zid, 1=put):\n");
+    for (int y = 0; y < maze.ny; y++) {
+        for (int x = 0; x < maze.nx; x++) {
+            scanf("%d", &maze.m[y][x]);
+            sol.m[y][x] = 0;
+        }
+    }
+
+    printf("Unesite redak i stupac pocetka: ");
+    scanf("%d %d", &startY, &startX);
+    printf("Unesite redak i stupac kraja: ");
+    scanf("%d %d", &endY, &endX);
+
+    solveMaze(&maze, &sol, startX, startY, endX, endY);
+
+    return 0;
+}
