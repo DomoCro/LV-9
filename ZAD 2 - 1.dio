@@ -1,0 +1,9 @@
+int solveMaze(Maze* maze, Maze* sol, int startX, int startY, int endX, int endY) {
+    if (solveMazeUntil(maze, startX, startY, sol, endX, endY) == 0) {
+        printf("Maze cannot be solved\n");
+        return 0;
+    }
+    printf("Maze solved successfully\n");
+    printMaze(sol);
+    return 1;
+}
