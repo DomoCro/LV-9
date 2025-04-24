@@ -1,0 +1,17 @@
+int main(void) {
+    Maze maze, sol;
+    int sx, sy, ex, ey;
+
+    printf("Unesite redak i stupac početka: ");
+    scanf("%d %d", &sy, &sx);
+    printf("Unesite redak i stupac kraja: ");
+    scanf("%d %d", &ey, &ex);
+
+    if (loadMaze("maze.txt", &maze, &sol)) {
+        solveMaze(&maze, &sol, sx, sy, ex, ey);
+    } else {
+        printf("Neuspjelo učitavanje labirinta.\n");
+    }
+
+    return 0;
+}
